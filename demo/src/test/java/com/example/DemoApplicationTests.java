@@ -18,7 +18,7 @@ public class DemoApplicationTests {
 
     @Test
     public void contextLoads() {
-        userMapper.insertUser(new User("33", "悟空", "2000", "男", "561518181818"));
+        userMapper.insertUser(new User("666", "悟空", "2000", "男", "561518181818"));
     }
 
 }
