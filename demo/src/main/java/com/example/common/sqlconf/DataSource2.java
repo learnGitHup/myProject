@@ -1,6 +1,5 @@
-package com.example.common;
+package com.example.common.sqlconf;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -21,16 +20,15 @@ import javax.sql.DataSource;
  * @date 2020/6/28 17:55
  */
 @Configuration
-@MapperScan(basePackages = "com.example.mapper.test1",sqlSessionFactoryRef = "ds1SqlSessionFactory")
-public class DataSource1 {
+@MapperScan(basePackages = "com.example.mapper.test2",sqlSessionFactoryRef = "ds2SqlSessionFactory")
+public class DataSource2 {
 
     /**
      * 返回data1数据库的数据源
      * @return
      */
-    @Bean(name="ds1Source")
-    @Primary//主数据源
-    @ConfigurationProperties(prefix = "spring.datasource.ds1")
+    @Bean(name="ds2Source")
+    @ConfigurationProperties(prefix = "spring.datasource.ds2")
     public DataSource dataSource(){
         return DataSourceBuilder.create().build();
     }
@@ -41,13 +39,12 @@ public class DataSource1 {
      * @return
      * @throws Exception
      */
-    @Bean(name = "ds1SqlSessionFactory")
+    @Bean(name = "ds2SqlSessionFactory")
     @Primary
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("ds1Source") DataSource ds) throws Exception{
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("ds2Source") DataSource ds) throws Exception{
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(ds);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/test1/*.xml"));
-
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/test2/*.xml"));
         return bean.getObject();
     }
 
@@ -57,9 +54,9 @@ public class DataSource1 {
      * @return
      * @throws Exception
      */
-    @Bean(name = "data1SqlSessionTemplate")
+    @Bean(name = "data2SqlSessionTemplate")
     @Primary
-    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("ds1SqlSessionFactory") SqlSessionFactory sessionFactory){
+    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("ds2SqlSessionFactory") SqlSessionFactory sessionFactory){
         return  new SqlSessionTemplate(sessionFactory);
     }
 
@@ -68,9 +65,9 @@ public class DataSource1 {
 //     * @param ds
 //     * @return
 //     */
-//    @Bean(name = "ds1TransactionManager")
+//    @Bean(name = "ds2TransactionManager")
 //    @Primary
-//    public DataSourceTransactionManager transactionManager(@Qualifier("ds1Source") DataSource ds){
+//    public DataSourceTransactionManager transactionManager(@Qualifier("ds2Source") DataSource ds){
 //        return new DataSourceTransactionManager(ds);
 //    }
 }

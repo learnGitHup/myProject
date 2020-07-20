@@ -1,11 +1,13 @@
 package com.example.controller;
 
+import com.example.common.ftp.client.FTPClientHelper;
 import com.example.entity.User;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +16,8 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     UserService userService;
+    @Resource
+    FTPClientHelper ftpClientHelper;  //调用storeFile方法上传文件,根路径配置文件中
 
 
     @RequestMapping("/findTest1")

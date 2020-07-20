@@ -1,7 +1,10 @@
 package com.example;
 
+import com.example.common.ftp.client.FTPClientHelper;
+import com.example.entity.MtcVehiclBillingRequest;
 import com.example.entity.User;
 import com.example.mapper.test1.UserMapper;
+import com.example.mapper.test2.UserMapper2;
 import com.example.service.UserService;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -12,9 +15,13 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,15 +34,37 @@ import java.util.stream.Collectors;
 @SpringBootTest
 public class DemoApplicationTests {
 
+    @Value("${MTC}")
+    private String mtc;
+    @Value("${ftpRootPath}")
+    private String ftpRootPath;
     @Autowired
     UserMapper userMapper;
     @Autowired
+    UserMapper2 userMapper2;
+    @Autowired
     UserService userService;
+    @Resource(name = "rateMongo")
+    private MongoTemplate mongoTemplate;
+    @Resource
+    FTPClientHelper ftpClientHelper;
+
 
     @Test
     public void contextLoads(){
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        userMapper.insertUser(new User(uuid, "悟空", "2000", "男", "561518181818"));
+        try {
+            File file = new File("E:\\uploadFile.txt");
+            ftpClientHelper.storeFile("file",file,ftpRootPath);
+            System.out.println("上传成功");
+        } catch (Exception e) {
+            System.out.println("上传失败");
+        }
+//        MtcVehiclBillingRequest request = new MtcVehiclBillingRequest();
+//        request.setFileName("ddddddddddddddddd");
+//        request.setMediaNo("rrrrrrrr");
+//        mongoTemplate.insert(request, mtc);
+//        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+//        userService.insertUser1(new User(uuid, "悟空", "2000", "男", "561518181818"));
     }
 
     void ss() {
